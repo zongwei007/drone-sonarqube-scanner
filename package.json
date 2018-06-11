@@ -1,0 +1,28 @@
+{
+  "name": "drone-sonarqube-setting",
+  "version": "1.0.0",
+  "description": "sonar-project.properties generator plugin for drone",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zongwei007/drone-sonarqube-setting.git"
+  },
+  "author": "zongwei007",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zongwei007/drone-sonarqube-setting/issues"
+  },
+  "homepage": "https://github.com/zongwei007/drone-sonarqube-setting#readme",
+  "dependencies": {
+    "sonarqube-scanner": "^2.0.2"
+  },
+  "devDependencies": {
+    "mock-require": "^3.0.2",
+    "prettier": "^1.13.4",
+    "pretty-quick": "^1.6.0",
+    "tape": "^4.9.0"
+  }
+}
