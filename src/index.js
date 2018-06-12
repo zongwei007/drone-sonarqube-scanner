@@ -6,11 +6,12 @@ const { buildMavenConfig } = require('./maven');
 
 function buildDefaultConfig() {
   const repoFullName = (process.env['DRONE_REPO'] || '').replace('/', ':');
+  const branchName = process.env['DRONE_BRANCH'];
   const ignoreBranch = !!process.env['PLUGIN_IGNORE_BRANCH'];
 
   return {
     'sonar.projectKey': ignoreBranch ? repoFullName : `${repoFullName}:${process.env['DRONE_BRANCH']}`,
-    'sonar.projectName': process.env['DRONE_REPO'],
+    'sonar.projectName': `${process.env['DRONE_REPO']}${branchName === 'master' ? '' : `:${branchName}`}`,
     'sonar.host.url': process.env['PLUGIN_HOST_URL'],
     'sonar.login': process.env['SONAR_TOKEN'],
     'sonar.exclusions': (process.env['PLUGIN_EXCLUSIONS'] || '').split(','),

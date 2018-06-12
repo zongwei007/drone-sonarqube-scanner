@@ -3,7 +3,7 @@ const mock = require('mock-require');
 
 const TEST_CONFIG = {
   'sonar.projectKey': 'org:repo:dev',
-  'sonar.projectName': 'org/repo',
+  'sonar.projectName': 'org/repo:dev',
   'sonar.host.url': 'url',
   'sonar.login': 'foo',
   'sonar.exclusions': ['build/**', 'test/**'],
@@ -40,7 +40,7 @@ test('build default config ignore branch', function(t) {
   mock.stopAll();
   t.deepEqual(buildDefaultConfig(), {
     'sonar.projectKey': 'org:repo',
-    'sonar.projectName': 'org/repo',
+    'sonar.projectName': 'org/repo:dev',
     'sonar.host.url': 'url',
     'sonar.login': 'foo',
     'sonar.exclusions': ['build/**', 'test/**'],
@@ -55,7 +55,7 @@ test('serialize config', function(t) {
   t.equal(
     serializeConfig(TEST_CONFIG),
     `sonar.projectKey=org:repo:dev
-sonar.projectName=org/repo
+sonar.projectName=org/repo:dev
 sonar.host.url=url
 sonar.login=foo
 sonar.exclusions=build/**,test/**`
