@@ -8,14 +8,21 @@ function buildDefaultConfig() {
   const repoFullName = (process.env['DRONE_REPO'] || '').replace('/', ':');
   const branchName = process.env['DRONE_BRANCH'];
   const ignoreBranch = !!process.env['PLUGIN_IGNORE_BRANCH'];
-
-  return {
+  const defaultConfig = {
     'sonar.projectKey': ignoreBranch ? repoFullName : `${repoFullName}:${process.env['DRONE_BRANCH']}`,
     'sonar.projectName': `${process.env['DRONE_REPO']}${branchName === 'master' ? '' : `:${branchName}`}`,
+    'sonar.sources': process.env['PLUGIN_SOURCES'],
     'sonar.host.url': process.env['PLUGIN_HOST_URL'],
     'sonar.login': process.env['SONAR_TOKEN'],
-    'sonar.exclusions': (process.env['PLUGIN_EXCLUSIONS'] || '').split(','),
+    'sonar.exclusions': (process.env['PLUGIN_EXCLUSIONS'] || '').split(',').filter(ele => !!ele),
   };
+
+  return Object.keys(defaultConfig)
+    .filter(key => !!defaultConfig[key])
+    .reduce((memo, key) => {
+      memo[key] = defaultConfig[key];
+      return memo;
+    }, {});
 }
 
 function serializeConfig(config) {

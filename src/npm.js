@@ -7,12 +7,7 @@ function buildNpmConfig(defaultConfig) {
   const sonarConfig = generator({}, process.cwd(), {});
 
   return Object.assign({}, sonarConfig, defaultConfig, {
-    [EXCLUSIONS]: uniq(
-      (sonarConfig[EXCLUSIONS] || '')
-        .split(',')
-        .concat(defaultConfig[EXCLUSIONS])
-        .filter(ele => !!ele)
-    ),
+    [EXCLUSIONS]: uniq((sonarConfig[EXCLUSIONS] || '').split(',').concat(defaultConfig[EXCLUSIONS] || [])),
   });
 }
 
