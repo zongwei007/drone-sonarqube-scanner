@@ -1,0 +1,21 @@
+sudo: required
+
+services:
+  - docker
+
+cache:
+  directories:
+    - node_modules
+
+language: node_js
+
+node_js: 8
+
+script:
+  - npm test
+
+deploy:
+  provider: script
+  script: bash scripts/deploy.sh
+  on:
+    branch: master
