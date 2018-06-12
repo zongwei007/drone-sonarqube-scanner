@@ -2,7 +2,7 @@ const test = require('tape');
 const mock = require('mock-require');
 
 const TEST_CONFIG = {
-  'sonar.projectKey': 'org/repo:dev',
+  'sonar.projectKey': 'org:repo:dev',
   'sonar.projectName': 'org/repo',
   'sonar.host.url': 'url',
   'sonar.login': 'foo',
@@ -30,21 +30,16 @@ test('build default config', function(t) {
 
 test('build default config ignore branch', function(t) {
   mock('process', {
-    env: {
-      DRONE_REPO: 'org/repo',
-      DRONE_BRANCH: 'dev',
+    env: Object.assign(TEST_ENV, {
       PLUGIN_IGNORE_BRANCH: 'true',
-      PLUGIN_HOST_URL: 'url',
-      PLUGIN_EXCLUSIONS: 'build/**,test/**',
-      SONAR_TOKEN: 'foo',
-    },
+    }),
   });
 
   const { buildDefaultConfig } = mock.reRequire('../src/index');
 
   mock.stopAll();
   t.deepEqual(buildDefaultConfig(), {
-    'sonar.projectKey': 'org/repo',
+    'sonar.projectKey': 'org:repo',
     'sonar.projectName': 'org/repo',
     'sonar.host.url': 'url',
     'sonar.login': 'foo',
@@ -59,7 +54,7 @@ test('serialize config', function(t) {
   mock.stopAll();
   t.equal(
     serializeConfig(TEST_CONFIG),
-    `sonar.projectKey=org/repo:dev
+    `sonar.projectKey=org:repo:dev
 sonar.projectName=org/repo
 sonar.host.url=url
 sonar.login=foo
@@ -95,6 +90,7 @@ test('unknow project type', function(t) {
   try {
     mock.reRequire('../src/index');
   } catch (e) {
+    console.log(e.message);
     mock.stopAll();
     t.ok(e.message.includes('decide project type'));
     t.end();
