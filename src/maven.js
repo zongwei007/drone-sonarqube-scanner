@@ -12,6 +12,8 @@ async function buildMavenConfig(defaultConfig) {
   const xmlObj = await parseXML(content);
 
   const sonarConfig = {
+    'sonar.projectVersion': get(xmlObj, 'project.version').join(','),
+    'sonar.projectDescription': get(xmlObj, 'project.description').join(','),
     'sonar.sources': ['src/main/java', 'pom.xml'],
     'sonar.java.binaries': 'target/classes',
   };

@@ -26,7 +26,7 @@ test('build pom simple', function(t) {
   t.plan(1);
   mock.stopAll();
 
-  buildMavenConfig({}).then(cfg => t.ok(cfg != null));
+  buildMavenConfig({}).then(cfg => t.ok(cfg['sonar.projectVersion'] === '11.17.2-SNAPSHOT'));
 });
 
 test('build pom with modules', function(t) {
