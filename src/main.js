@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs-extra');
 const process = require('process');
 const isObject = require('lodash.isobject');
 const { buildNpmConfig } = require('./npm');
@@ -39,20 +39,18 @@ function serializeConfig(config) {
 }
 
 const defaultConfig = buildDefaultConfig();
-const fileExists = toPromise(fs.exists);
-const writeFile = toPromise(fs.writeFile);
 
 async function writeProjectPropertis() {
   let config;
-  if (await fileExists('package.json')) {
+  if (await fs.pathExists('package.json')) {
     config = await buildNpmConfig(defaultConfig);
-  } else if (await fileExists('pom.xml')) {
+  } else if (await fs.pathExists('pom.xml')) {
     config = await buildMavenConfig(defaultConfig);
   } else {
     throw new Error('Can not decide project type.');
   }
 
-  return writeFile('sonar-project.properties', serializeConfig(config));
+  return fs.outputFile('sonar-project.properties', serializeConfig(config));
 }
 
 module.exports = {

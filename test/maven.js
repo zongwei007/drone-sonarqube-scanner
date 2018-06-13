@@ -1,19 +1,15 @@
-const fs = require('fs');
+const fs = require('fs-extra');
 const test = require('tape');
 const mock = require('mock-require');
 const isObject = require('lodash.isobject');
 
 test('convert pom.xml to js', function(t) {
-  mock('fs', {
-    readFile: (fileName, cb) => fs.readFile('test/pom-simple.xml', cb),
-  });
-
-  const { readFile, parseXML } = mock.reRequire('../src/maven');
+  const { parseXML } = mock.reRequire('../src/maven');
 
   t.plan(1);
   mock.stopAll();
 
-  readFile('pom.xml')
+  fs.readFile('test/pom-simple.xml')
     .then(data => parseXML(data))
     .then(data => {
       t.ok(isObject(data));
@@ -21,8 +17,8 @@ test('convert pom.xml to js', function(t) {
 });
 
 test('build pom simple', function(t) {
-  mock('fs', {
-    readFile: (fileName, cb) => fs.readFile('test/pom-simple.xml', cb),
+  mock('fs-extra', {
+    readFile: () => fs.readFile('test/pom-simple.xml'),
   });
 
   const { buildMavenConfig } = mock.reRequire('../src/maven');
@@ -34,8 +30,8 @@ test('build pom simple', function(t) {
 });
 
 test('build pom with modules', function(t) {
-  mock('fs', {
-    readFile: (fileName, cb) => fs.readFile('test/pom-with-modules.xml', cb),
+  mock('fs-extra', {
+    readFile: () => fs.readFile('test/pom-with-modules.xml'),
   });
 
   const { buildMavenConfig } = mock.reRequire('../src/maven');

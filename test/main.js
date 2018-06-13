@@ -65,11 +65,11 @@ sonar.exclusions=build/**,test/**`
 
 test('write config', function(t) {
   let fileContent;
-  mock('fs', {
-    exists: (name, cb) => cb(null, true),
-    writeFile: (fileName, content, cb) => {
+  mock('fs-extra', {
+    pathExists: () => Promise.resolve(true),
+    outputFile: (fileName, content) => {
       fileContent = content;
-      cb(null, true);
+      return Promise.resolve(true);
     },
   });
   mock('process', {
@@ -87,8 +87,8 @@ test('write config', function(t) {
 });
 
 test('unknow project type', function(t) {
-  mock('fs', {
-    exists: (name, cb) => cb(null, false),
+  mock('fs-extra', {
+    pathExists: () => Promise.resolve(false),
   });
 
   const { writeProjectPropertis } = mock.reRequire('../src/main');
