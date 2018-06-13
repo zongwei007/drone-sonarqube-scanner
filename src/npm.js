@@ -3,7 +3,7 @@ const generator = require('sonarqube-scanner/dist/sonarqube-scanner-params');
 
 const EXCLUSIONS = 'sonar.exclusions';
 
-function buildNpmConfig(defaultConfig) {
+async function buildNpmConfig(defaultConfig) {
   const sonarConfig = generator({}, process.cwd(), {});
 
   return Object.assign({}, sonarConfig, defaultConfig, {

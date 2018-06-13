@@ -21,7 +21,7 @@ test('build default config', function(t) {
     env: TEST_ENV,
   });
 
-  const { buildDefaultConfig } = mock.reRequire('../src/index');
+  const { buildDefaultConfig } = mock.reRequire('../src/main');
 
   mock.stopAll();
   t.deepEqual(buildDefaultConfig(), TEST_CONFIG);
@@ -35,7 +35,7 @@ test('build default config ignore branch', function(t) {
     }),
   });
 
-  const { buildDefaultConfig } = mock.reRequire('../src/index');
+  const { buildDefaultConfig } = mock.reRequire('../src/main');
 
   mock.stopAll();
   t.deepEqual(buildDefaultConfig(), {
@@ -49,7 +49,7 @@ test('build default config ignore branch', function(t) {
 });
 
 test('serialize config', function(t) {
-  const { serializeConfig } = require('../src/index');
+  const { serializeConfig } = require('../src/main');
 
   mock.stopAll();
   t.equal(
@@ -66,33 +66,38 @@ sonar.exclusions=build/**,test/**`
 test('write config', function(t) {
   let fileContent;
   mock('fs', {
-    existsSync: () => true,
-    writeFileSync: (fileName, content) => {
-      return (fileContent = content);
+    exists: (name, cb) => cb(null, true),
+    writeFile: (fileName, content, cb) => {
+      fileContent = content;
+      cb(null, true);
     },
   });
   mock('process', {
     env: TEST_ENV,
   });
 
-  mock.reRequire('../src/index');
+  const { writeProjectPropertis } = mock.reRequire('../src/main');
 
+  t.plan(1);
   mock.stopAll();
-  t.ok(fileContent.length > 0, 'has content.');
-  t.end();
+
+  writeProjectPropertis().then(() => {
+    t.ok(fileContent.length > 0, 'has content.');
+  });
 });
 
 test('unknow project type', function(t) {
   mock('fs', {
-    existsSync: () => false,
+    exists: (name, cb) => cb(null, false),
   });
 
-  try {
-    mock.reRequire('../src/index');
-  } catch (e) {
+  const { writeProjectPropertis } = mock.reRequire('../src/main');
+
+  t.plan(1);
+  mock.stopAll();
+
+  writeProjectPropertis().catch(e => {
     console.log(e.message);
-    mock.stopAll();
     t.ok(e.message.includes('decide project type'));
-    t.end();
-  }
+  });
 });
