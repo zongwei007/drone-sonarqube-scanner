@@ -13,7 +13,6 @@ async function buildMavenConfig(defaultConfig) {
 
   const sonarConfig = {
     'sonar.sources': ['src/main/java', 'pom.xml'],
-    'sonar.language': ['java', 'xml'],
     'sonar.java.binaries': 'target/classes',
   };
 
