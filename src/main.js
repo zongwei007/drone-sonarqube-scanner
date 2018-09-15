@@ -14,7 +14,7 @@ function buildDefaultConfig() {
     'sonar.projectName': `${process.env['DRONE_REPO']}${branchName === 'master' ? '' : `:${branchName}`}`,
     'sonar.sources': process.env['PLUGIN_SOURCES'],
     'sonar.host.url': process.env['PLUGIN_HOST_URL'],
-    'sonar.login': process.env['SONAR_TOKEN'],
+    'sonar.login':process.env['PLUGIN_LOGIN'] || process.env['SONAR_TOKEN'],
     'sonar.exclusions': (process.env['PLUGIN_EXCLUSIONS'] || '').split(',').filter(ele => !!ele),
   };
 

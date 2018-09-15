@@ -13,7 +13,7 @@ const TEST_ENV = {
   DRONE_BRANCH: 'dev',
   PLUGIN_HOST_URL: 'url',
   PLUGIN_EXCLUSIONS: 'build/**,test/**',
-  SONAR_TOKEN: 'foo',
+  PLUGIN_LOGIN: 'foo',
 };
 
 test('build default config', function(t) {
