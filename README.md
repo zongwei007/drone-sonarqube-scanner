@@ -6,7 +6,21 @@
 
 * sonar.projectKey 对应 git 仓库名 + git 分支名
 * sonar.projectName git 分支名
-* sonar.sources 插件 `sources` 参数
-* sonar.host.url 插件 `host_url` 参数
-* sonar.login 插件 `login` 参数，或 `SONAR_TOKEN` 环境变量
-* sonar.exclusions 插件 `exclusions` 参数，数组类型
+* sonar.login 插件 `SONAR_LOGIN` 环境变量
+
+其余属性会从插件参数中获取，规则为：
+
+* 不需声明 sonar 前缀
+* 使用 `_` 替代 `.`，如 sonar.login.url 声明为 login_url
+* 可以使用数组表示多值，最终会通过 `,` 拼接
+
+配置样例：
+
+```yml
+setting-sonarqube:
+  image: knives/drone-sonarqube-setting
+  secrets: [ sonar_login ]
+  host_url: https://sonar.ltsoft.biz
+  exclusions:
+    - assets/**
+```
