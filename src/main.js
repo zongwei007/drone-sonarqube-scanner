@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const process = require('process');
+const slugify = require('slugify');
 const isObject = require('lodash.isobject');
 const { buildNpmConfig } = require('./npm');
 const { buildMavenConfig } = require('./maven');
@@ -32,7 +33,7 @@ function buildDefaultConfig() {
     }, {});
 
   const defaultConfig = {
-    'sonar.projectKey': (withBranch ? repoFullName : `${repoFullName}:${branchName}`).replace(/\//g, ':'),
+    'sonar.projectKey': slugify((withBranch ? repoFullName : `${repoFullName}:${branchName}`).replace(/\//g, ':')),
     'sonar.projectName': `${repoFullName}${branchName === 'master' ? '' : `:${branchName}`}`,
     'sonar.branch.name': withBranch ? branchName : null,
     'sonar.login': process.env['SONAR_LOGIN'],
