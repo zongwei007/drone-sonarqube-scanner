@@ -13,7 +13,7 @@ const TEST_CONFIG = {
 const TEST_ENV = {
   DRONE_REPO: 'org/repo',
   DRONE_BRANCH: 'dev',
-  PLUGIN_HOST_URL: 'url',
+  PLUGIN_HOST: '{"url":"url"}',
   PLUGIN_EXCLUSIONS: 'build/**,test/**',
   PLUGIN_LOGIN: 'foo',
 };

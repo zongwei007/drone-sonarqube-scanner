@@ -3,7 +3,7 @@ const process = require('process');
 const isObject = require('lodash.isobject');
 const { buildNpmConfig } = require('./npm');
 const { buildMavenConfig } = require('./maven');
-const { toPromise } = require('./util');
+const { assignDeep, flattenMap, toPromise } = require('./util');
 
 const NOT_MATCHED_KEYS = ['PLUGIN_IGNORE_BRANCH'];
 
@@ -16,22 +16,27 @@ function buildDefaultConfig() {
     .filter(key => key.startsWith('PLUGIN_'))
     .filter(key => !NOT_MATCHED_KEYS.includes(key))
     .reduce((memo, key) => {
-      const sonarKey = key
-        .toLowerCase()
-        .replace('plugin_', 'sonar.')
-        .replace(/_/g, '.');
-      const sonarVal = process.env[key].split(',').filter(ele => !!ele);
+      const sonarKey = key.toLowerCase().replace('plugin_', 'sonar.');
 
-      memo[sonarKey] = sonarVal.length > 1 ? sonarVal : sonarVal[0];
+      let sonarVal = process.env[key];
+      if (sonarVal.startsWith('[') || sonarVal.startsWith('{')) {
+        sonarVal = JSON.parse(sonarVal);
+      } else {
+        const valArray = sonarVal.split(',');
+        sonarVal = valArray.length > 1 ? valArray : valArray[0];
+      }
+
+      memo[sonarKey] = sonarVal;
+
       return memo;
     }, {});
 
   const defaultConfig = {
     'sonar.projectKey': (ignoreBranch ? repoFullName : `${repoFullName}:${branchName}`).replace(/\//g, ':'),
-    'sonar.projectName': `${process.env['DRONE_REPO']}${branchName === 'master' ? '' : `:${branchName}`}`,
+    'sonar.projectName': `${repoFullName}${branchName === 'master' ? '' : `:${branchName}`}`,
     'sonar.branch.name': branchName,
     'sonar.login': process.env['SONAR_LOGIN'],
-    ...pluginConfig,
+    ...flattenMap(pluginConfig),
   };
 
   return Object.keys(defaultConfig)
