@@ -30,7 +30,7 @@ test('build npm config', function(t) {
       'sonar.projectVersion': '1.0.0',
       'sonar.projectDescription': 'sonar-project.properties generator plugin for drone',
       'sonar.sources': '.',
-      'sonar.exclusions': ['node_modules/**'],
+      'sonar.exclusions': ['node_modules/**', 'bower_components/**', 'jspm_packages/**', 'typings/**', 'lib-cov/**'],
     })
   );
 });
