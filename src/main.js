@@ -5,12 +5,12 @@ const { buildNpmConfig } = require('./npm');
 const { buildMavenConfig } = require('./maven');
 const { assignDeep, flattenMap, toPromise } = require('./util');
 
-const NOT_MATCHED_KEYS = ['PLUGIN_IGNORE_BRANCH'];
+const NOT_MATCHED_KEYS = ['PLUGIN_WITH_BRANCH'];
 
 function buildDefaultConfig() {
   const repoFullName = process.env['DRONE_REPO'] || '';
   const branchName = process.env['DRONE_BRANCH'] || '';
-  const ignoreBranch = !!process.env['PLUGIN_IGNORE_BRANCH'];
+  const withBranch = !!process.env['PLUGIN_WITH_BRANCH'];
 
   const pluginConfig = Object.keys(process.env)
     .filter(key => key.startsWith('PLUGIN_'))
@@ -32,9 +32,9 @@ function buildDefaultConfig() {
     }, {});
 
   const defaultConfig = {
-    'sonar.projectKey': (ignoreBranch ? repoFullName : `${repoFullName}:${branchName}`).replace(/\//g, ':'),
+    'sonar.projectKey': (withBranch ? repoFullName : `${repoFullName}:${branchName}`).replace(/\//g, ':'),
     'sonar.projectName': `${repoFullName}${branchName === 'master' ? '' : `:${branchName}`}`,
-    'sonar.branch.name': branchName,
+    'sonar.branch.name': withBranch ? branchName : null,
     'sonar.login': process.env['SONAR_LOGIN'],
     ...flattenMap(pluginConfig),
   };

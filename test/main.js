@@ -4,7 +4,6 @@ const mock = require('mock-require');
 const TEST_CONFIG = {
   'sonar.projectKey': 'org:repo:dev',
   'sonar.projectName': 'org/repo:dev',
-  'sonar.branch.name': 'dev',
   'sonar.host.url': 'url',
   'sonar.login': 'foo',
   'sonar.exclusions': ['build/**', 'test/**'],
@@ -33,7 +32,7 @@ test('build default config', function(t) {
 test('build default config ignore branch', function(t) {
   mock('process', {
     env: Object.assign(TEST_ENV, {
-      PLUGIN_IGNORE_BRANCH: 'true',
+      PLUGIN_WITH_BRANCH: 'true',
     }),
   });
 
@@ -59,7 +58,6 @@ test('serialize config', function(t) {
     serializeConfig(TEST_CONFIG),
     `sonar.projectKey=org:repo:dev
 sonar.projectName=org/repo:dev
-sonar.branch.name=dev
 sonar.host.url=url
 sonar.login=foo
 sonar.exclusions=build/**,test/**`
