@@ -7,7 +7,6 @@
 * sonar.projectKey 对应 git 仓库名:git 分支名
 * sonar.projectName git 仓库名:git 分支名
 * sonar.branch.name git 分支名
-* sonar.login 插件 `SONAR_LOGIN` 环境变量
 
 其余属性会从插件参数中获取，规则为：
 
@@ -18,11 +17,13 @@
 配置样例：
 
 ```yml
-setting-sonarqube:
+- name: setting-sonarqube
   image: knives/drone-sonarqube-setting
-  secrets: [ sonar_login ]
-  host:
-    url: https://sonar.com
-  exclusions:
-    - assets/**
+  settings:
+    host:
+      url: https://sonar.com
+    login:
+      from_secret: sonar_login
+    exclusions:
+      - assets/**
 ```

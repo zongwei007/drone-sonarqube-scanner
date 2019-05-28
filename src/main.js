@@ -4,7 +4,7 @@ const slugify = require('slugify');
 const isObject = require('lodash.isobject');
 const { buildNpmConfig } = require('./npm');
 const { buildMavenConfig } = require('./maven');
-const { assignDeep, flattenMap, toPromise } = require('./util');
+const { flattenMap } = require('./util');
 
 const NOT_MATCHED_KEYS = ['PLUGIN_WITH_BRANCH'];
 
@@ -36,7 +36,6 @@ function buildDefaultConfig() {
     'sonar.projectKey': slugify((withBranch ? repoFullName : `${repoFullName}:${branchName}`).replace(/\//g, ':')),
     'sonar.projectName': `${repoFullName}${branchName === 'master' ? '' : `:${branchName}`}`,
     'sonar.branch.name': withBranch ? branchName : null,
-    'sonar.login': process.env['SONAR_LOGIN'],
     ...flattenMap(pluginConfig),
   };
 
