@@ -1,10 +1,9 @@
-const fs = require('fs-extra');
 const process = require('process');
 const slugify = require('slugify');
 const isObject = require('lodash.isobject');
 const { buildNpmConfig } = require('./npm');
 const { buildMavenConfig } = require('./maven');
-const { flattenMap } = require('./util');
+const { existsAsync, flattenMap, writeFileAsync } = require('./util');
 
 const NOT_MATCHED_KEYS = ['PLUGIN_WITH_BRANCH'];
 
@@ -63,15 +62,15 @@ const defaultConfig = buildDefaultConfig();
 
 async function writeProjectPropertis() {
   let config;
-  if (await fs.pathExists('package.json')) {
+  if (await existsAsync('package.json')) {
     config = await buildNpmConfig(defaultConfig);
-  } else if (await fs.pathExists('pom.xml')) {
+  } else if (await existsAsync('pom.xml')) {
     config = await buildMavenConfig(defaultConfig);
   } else {
     throw new Error('Can not decide project type.');
   }
 
-  return fs.outputFile('sonar-project.properties', serializeConfig(config));
+  return writeFileAsync('sonar-project.properties', serializeConfig(config));
 }
 
 module.exports = {

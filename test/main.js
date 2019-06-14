@@ -1,5 +1,6 @@
 const test = require('tape');
 const mock = require('mock-require');
+const utils = require('../src/util');
 
 const TEST_CONFIG = {
   'sonar.projectKey': 'org:repo:dev',
@@ -67,9 +68,10 @@ sonar.exclusions=build/**,test/**`
 
 test('write config', function(t) {
   let fileContent;
-  mock('fs-extra', {
-    pathExists: () => Promise.resolve(true),
-    outputFile: (fileName, content) => {
+  mock('../src/util', {
+    ...utils,
+    existsAsync: () => Promise.resolve(true),
+    writeFileAsync: (fileName, content) => {
       fileContent = content;
       return Promise.resolve(true);
     },
@@ -89,8 +91,9 @@ test('write config', function(t) {
 });
 
 test('unknow project type', function(t) {
-  mock('fs-extra', {
-    pathExists: () => Promise.resolve(false),
+  mock('../src/util', {
+    ...utils,
+    existsAsync: () => Promise.resolve(false),
   });
 
   const { writeProjectPropertis } = mock.reRequire('../src/main');

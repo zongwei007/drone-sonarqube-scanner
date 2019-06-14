@@ -1,15 +1,14 @@
-const fs = require('fs-extra');
+const { promisify } = require('util');
 const { env } = require('process');
 const { parseString } = require('xml2js');
-const { toPromise } = require('./util');
+const { readFileAsync } = require('./util');
 const has = require('lodash.has');
 const get = require('lodash.get');
 
-const parseXML = toPromise(parseString);
-const whenTimeout = ms => new Promise((resolve, reject) => setTimeout(reject, ms));
+const parseXML = promisify(parseString);
 
 async function buildMavenConfig(defaultConfig) {
-  const content = await fs.readFile('pom.xml');
+  const content = await readFileAsync('pom.xml');
   const xmlObj = await parseXML(content);
 
   const sonarConfig = {

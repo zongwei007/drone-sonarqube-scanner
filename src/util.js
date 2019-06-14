@@ -1,15 +1,9 @@
-function toPromise(f) {
-  return (...args) =>
-    new Promise((resolve, reject) =>
-      f(...args, (err, data) => {
-        if (err) {
-          reject(err);
-        }
+const { promisify } = require('util');
+const fs = require('fs');
 
-        resolve(data);
-      })
-    );
-}
+const existsAsync = promisify(fs.exists);
+const readFileAsync = promisify(fs.readFile);
+const writeFileAsync = promisify(fs.writeFile);
 
 function assignDeep(target, ...source) {
   source.forEach(item =>
@@ -41,6 +35,8 @@ function flattenMap(data, parents = []) {
 
 module.exports = {
   assignDeep,
+  existsAsync,
   flattenMap,
-  toPromise,
+  readFileAsync,
+  writeFileAsync,
 };
