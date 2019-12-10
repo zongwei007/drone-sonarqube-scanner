@@ -6,13 +6,13 @@ cache:
 
 language: node_js
 
-node_js: 8
+node_js: 11
 
 script:
   - npm test
 
 deploy:
   provider: script
-  script: bash scripts/deploy.sh
+  script: curl -X POST https://cloud.docker.com/api/build/v1/source/$DOCKER_USER_TOKEN/trigger/$DOCKER_HOOK_TOKEN/call/
   on:
     branch: master
