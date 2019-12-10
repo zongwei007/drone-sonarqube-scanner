@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker build --build-arg SCANNER_VERSION=$SCANNER_VERSION . -t knives/drone-sonarqube-setting
+docker build --build-arg SCANNER_VERSION=$SCANNER_VERSION . -t knives/drone-sonarqube-scanner
 
 curl -H "Content-Type: application/json" \
   --data '{"source_type": "Branch", "source_name":"master"}' \

@@ -10,7 +10,7 @@ test('build npm config', async function(t) {
   });
 
   mock('read-pkg', async () => ({
-    name: 'drone-sonarqube-setting',
+    name: 'drone-sonarqube-scanner',
     version: '1.0.0',
     description: 'sonar-project.properties generator plugin for drone',
   }));

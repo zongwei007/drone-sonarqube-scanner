@@ -1,4 +1,4 @@
-# drone-sonarqube-setting [![Build Status](https://travis-ci.org/zongwei007/drone-sonarqube-setting.svg?branch=master)](https://travis-ci.org/zongwei007/drone-sonarqube-setting)
+# drone-sonarqube-scanner [![Build Status](https://travis-ci.org/zongwei007/drone-sonarqube-scanner.svg?branch=master)](https://travis-ci.org/zongwei007/drone-sonarqube-scanner)
 
 用于生产 sonarqube 扫描配置文件 `sonar-project.properties`。支持 `npm` 和 `maven` 项目。
 
@@ -18,7 +18,7 @@
 
 ```yml
 - name: setting-sonarqube
-  image: knives/drone-sonarqube-setting
+  image: knives/drone-sonarqube-scanner
   settings:
     host:
       url: https://sonar.com
