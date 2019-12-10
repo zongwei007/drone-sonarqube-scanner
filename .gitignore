@@ -62,3 +62,6 @@ typings/
 
 # sonarqube
 sonar-project.properties
+
+# IDEA
+.idea/
