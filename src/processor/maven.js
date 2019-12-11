@@ -1,6 +1,7 @@
 const { parseString } = require('xml2js');
-const has = require('lodash.has');
 const get = require('lodash.get');
+const has = require('lodash.has');
+const merge = require('lodash.merge');
 const { exists, promisify, readFile } = require('../util');
 
 const parseXML = promisify(parseString);
@@ -29,10 +30,7 @@ async function builder(config, env) {
     sonarConfig.modules = get(xmlObj, 'project.modules[0].module');
   }
 
-  return {
-    ...config,
-    ...sonarConfig,
-  };
+  return merge({}, config, sonarConfig);
 }
 
 module.exports = { process: builder };

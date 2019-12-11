@@ -1,6 +1,7 @@
 const path = require('path');
 const readPkg = require('read-pkg');
 const get = require('lodash.get');
+const merge = require('lodash.merge');
 const { exists } = require('../util');
 
 async function builder(config) {
@@ -49,13 +50,10 @@ async function builder(config) {
     };
   }
 
-  return {
-    sources: '.',
-    ...config,
-    ...sonarConfig,
+  return merge({ sources: '.' }, config, sonarConfig, {
     exclusions: [...new Set(exclusions)],
     ...(Object.keys(javascript).length ? { javascript } : {}),
-  };
+  });
 }
 
 async function findLcovReportPath(pkg) {
