@@ -38,7 +38,7 @@ async function builder(config) {
 
   const exclusions = [
     ...sonarConfig.exclusions,
-    ...(config.exclusions || []),
+    ...(Array.isArray(config.exclusions) ? config.exclusions : [config.exclusions]).filter(Boolean),
     ...(lcovReportInfo ? [lcovReportInfo[0]] : []),
   ];
 
@@ -50,10 +50,15 @@ async function builder(config) {
     };
   }
 
-  return merge({ sources: '.' }, config, sonarConfig, {
-    exclusions: [...new Set(exclusions)],
-    ...(Object.keys(javascript).length ? { javascript } : {}),
-  });
+  return merge(
+    { sources: '.' },
+    sonarConfig,
+    {
+      exclusions: [...new Set(exclusions)],
+      ...(Object.keys(javascript).length ? { javascript } : {}),
+    },
+    config
+  );
 }
 
 async function findLcovReportPath(pkg) {

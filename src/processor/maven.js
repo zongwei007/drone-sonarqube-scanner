@@ -30,7 +30,7 @@ async function builder(config, env) {
     sonarConfig.modules = get(xmlObj, 'project.modules[0].module');
   }
 
-  return merge({}, config, sonarConfig);
+  return merge({}, sonarConfig, config);
 }
 
 module.exports = { process: builder };
