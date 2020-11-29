@@ -2,7 +2,7 @@
   "name": "drone-sonarqube-scanner",
   "version": "1.0.0",
   "description": "sonar-project.properties generator plugin for drone",
-  "main": "src/index.js",
+  "main": "src/main.ts",
   "scripts": {
     "test": "deno test -A",
     "prettier": "prettier --write ./src/**/*"

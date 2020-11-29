@@ -1,8 +1,8 @@
-import merge from 'https://raw.githubusercontent.com/lodash/lodash/master/merge.js';
+import merge from 'https://unpkg.com/lodash-es@4.17.15/merge.js';
 
 import { buildDefaultConfig, serializeConfig } from './config.ts';
 import { flattenMap } from './util.ts';
-import processors  from './processor/mod.ts';
+import processors from './processor/mod.ts';
 
 const env = Deno.env.toObject();
 const defaultConfig = buildDefaultConfig(env);
