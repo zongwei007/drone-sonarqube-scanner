@@ -1,29 +1,21 @@
-const path = require('path');
-const readPkg = require('read-pkg');
-const get = require('lodash.get');
-const merge = require('lodash.merge');
-const { exists } = require('../util');
+import merge from 'https://unpkg.com/lodash-es@4.17.15/merge.js';
+import { exists } from 'https://deno.land/std@0.79.0/fs/exists.ts';
+import { posix, resolve } from 'https://deno.land/std@0.79.0/path/mod.ts';
 
-async function builder(config) {
-  const isExist = await exists('package.json');
+import { SETTINGS } from '../util.ts';
 
-  if (!isExist) {
-    return config;
-  }
-
-  const pkg = await readPkg();
-
-  const links = {};
+export async function mix(pkg: SETTINGS, config: SETTINGS) {
+  const links: SETTINGS = {};
 
   if (pkg.homepage) {
     links.homepage = pkg.homepage;
   }
 
-  if (pkg.bugs && pkg.bugs.url) {
+  if (pkg.bugs?.url) {
     links.issues = pkg.bugs.url;
   }
 
-  if (pkg.repository && pkg.repository.url) {
+  if (pkg.repository?.url) {
     links.scm = pkg.repository.url;
   }
 
@@ -42,7 +34,7 @@ async function builder(config) {
     ...(lcovReportInfo ? [lcovReportInfo[0]] : []),
   ];
 
-  const javascript = {};
+  const javascript: SETTINGS = {};
 
   if (lcovReportInfo) {
     javascript.lcov = {
@@ -61,16 +53,15 @@ async function builder(config) {
   );
 }
 
-async function findLcovReportPath(pkg) {
+async function findLcovReportPath(pkg: SETTINGS) {
   const paths = [
     // jest coverage output directory
     // See: http://facebook.github.io/jest/docs/en/configuration.html#coveragedirectory-string
-    'jest.coverageDirectory',
+    pkg.jest?.coverageDirectory,
     // nyc coverage output directory
     // See: https://github.com/istanbuljs/nyc#configuring-nyc
-    'nyc.report-dir',
+    pkg.nyc?.['report-dir'],
   ]
-    .map(path => get(pkg, path))
     .filter(Boolean)
     .map(String)
     .concat(
@@ -79,11 +70,11 @@ async function findLcovReportPath(pkg) {
     );
 
   const lcovReportPaths = await Promise.all(
-    paths.map(lcovReportDir => {
-      const lcovReportPath = path.posix.join(lcovReportDir, 'lcov.info');
+    paths.map((lcovReportDir) => {
+      const lcovReportPath = posix.join(lcovReportDir, 'lcov.info');
 
-      return exists(path.resolve(process.cwd(), lcovReportPath)).then(
-        flag => flag && [path.posix.join(lcovReportDir, '**'), lcovReportPath]
+      return exists(resolve(Deno.cwd(), lcovReportPath)).then(
+        (flag: boolean) => flag && [posix.join(lcovReportDir, '**'), lcovReportPath]
       );
     })
   );
@@ -91,4 +82,16 @@ async function findLcovReportPath(pkg) {
   return lcovReportPaths.find(Array.isArray);
 }
 
-module.exports = { process: builder };
+async function process(config: SETTINGS) {
+  const isExist = await exists('package.json');
+
+  if (!isExist) {
+    return config;
+  }
+
+  const pkg: SETTINGS = await Deno.readTextFile('package.json').then(JSON.parse);
+
+  return mix(pkg, config);
+}
+
+export default { process };

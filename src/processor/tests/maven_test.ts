@@ -1,41 +1,22 @@
-const test = require('tape');
-const mock = require('mock-require');
+import { assertEquals, assertStrictEquals } from 'https://deno.land/std@0.79.0/testing/asserts.ts';
+import parse from 'https://github.com/nekobato/deno-xml-parser/raw/master/index.ts';
 
-const utils = require('../../src/util');
+import { mix } from '../maven.ts';
 
-test('build pom simple', async function(t) {
-  mock('../../src/util', {
-    ...utils,
-    exists: () => true,
-    readFile: () => utils.readFile('test/resource/pom-simple.xml'),
-  });
+Deno.test('build pom simple', async () => {
+  const document = await Deno.readTextFile('./tests/pom-simple.xml').then(parse);
 
-  const { process } = mock.reRequire('../../src/processor/maven');
+  const cfg = mix(document, {}, {});
 
-  t.plan(1);
-
-  const cfg = await process({}, {});
-
-  t.equal(cfg.projectVersion, '11.17.2-SNAPSHOT');
-  t.end();
-
-  mock.stopAll();
+  assertStrictEquals(cfg.projectVersion, '11.17.2-SNAPSHOT');
 });
 
-test('build pom with modules', async function(t) {
-  mock('../../src/util', {
-    ...utils,
-    exists: () => true,
-    readFile: () => utils.readFile('test/resource/pom-with-modules.xml'),
-  });
+Deno.test('build pom with modules', async () => {
+  const document = await Deno.readTextFile('./tests/pom-with-modules.xml').then(parse);
 
-  const { process } = mock.reRequire('../../src/processor/maven');
+  const cfg = mix(document, {}, {});
 
-  t.plan(1);
-
-  const cfg = await process({}, {});
-
-  t.deepEqual(cfg.modules, [
+  assertEquals(cfg.modules, [
     'docs',
     'dropwizard-bom',
     'dropwizard-core',
@@ -71,7 +52,4 @@ test('build pom with modules', async function(t) {
     'dropwizard-e2e',
     'dropwizard-json-logging',
   ]);
-  t.end();
-
-  mock.stopAll();
 });

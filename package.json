@@ -4,8 +4,8 @@
   "description": "sonar-project.properties generator plugin for drone",
   "main": "src/index.js",
   "scripts": {
-    "test": "tape test/**/*.js",
-    "prettier": "prettier --write **/*.js"
+    "test": "deno test -A",
+    "prettier": "prettier --write ./src/**/*"
   },
   "repository": {
     "type": "git",
@@ -17,19 +17,7 @@
     "url": "https://github.com/zongwei007/drone-sonarqube-scanner/issues"
   },
   "homepage": "https://github.com/zongwei007/drone-sonarqube-scanner#readme",
-  "dependencies": {
-    "lodash.get": "^4.4.2",
-    "lodash.has": "^4.5.2",
-    "lodash.isobject": "^3.0.2",
-    "lodash.merge": "^4.6.2",
-    "read-pkg": "^5.2.0",
-    "slugify": "^1.3.4",
-    "xml2js": "^0.4.19"
-  },
   "devDependencies": {
-    "mock-require": "^3.0.3",
-    "prettier": "^1.19.1",
-    "pretty-quick": "^1.11.1",
-    "tape": "^4.11.0"
+    "prettier": "^2.2.1"
   }
 }

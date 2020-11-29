@@ -1,11 +1,10 @@
-const merge = require('lodash.merge');
+import merge from 'https://raw.githubusercontent.com/lodash/lodash/master/merge.js';
 
-const { buildDefaultConfig, serializeConfig } = require('./config');
-const { flattenMap, writeFile } = require('./util');
-const processors = require('./processor');
+import { buildDefaultConfig, serializeConfig } from './config.ts';
+import { flattenMap } from './util.ts';
+import processors  from './processor/mod.ts';
 
-const { env } = process;
-
+const env = Deno.env.toObject();
 const defaultConfig = buildDefaultConfig(env);
 
 (async () => {
@@ -22,5 +21,5 @@ const defaultConfig = buildDefaultConfig(env);
   console.log('sonar project config:', '\n');
   console.log(properties, '\n');
 
-  await writeFile('sonar-project.properties', properties);
+  await Deno.writeTextFile('sonar-project.properties', properties);
 })();
