@@ -1,4 +1,4 @@
-# drone-sonarqube-scanner [![Build Status](https://travis-ci.org/zongwei007/drone-sonarqube-scanner.svg?branch=master)](https://travis-ci.org/zongwei007/drone-sonarqube-scanner)
+# drone-sonarqube-scanner ![Build Status](https://github.com/zongwei007/drone-sonarqube-scanner/workflows/Build/badge.svg)
 
 用于生成 sonarqube 配置文件 `sonar-project.properties` 并执行 `sonar-scanner`。支持 `npm` 和 `maven` 项目。
 

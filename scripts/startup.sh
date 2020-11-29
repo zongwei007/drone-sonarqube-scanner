@@ -1,4 +1,4 @@
 #!/bin/sh
 
-node /plugin/index.js
+drone-sonarqube-setting
 sonar-scanner
