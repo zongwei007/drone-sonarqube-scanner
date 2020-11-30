@@ -1,4 +1,6 @@
-# drone-sonarqube-scanner ![Build Status](https://github.com/zongwei007/drone-sonarqube-scanner/workflows/Build/badge.svg)
+[![Build Status](https://github.com/zongwei007/drone-sonarqube-scanner/workflows/Build/badge.svg)](https://github.com/zongwei007/drone-sonarqube-scanner/actions?query=workflow%3ABuild)
+
+# drone-sonarqube-scanner
 
 用于生成 sonarqube 配置文件 `sonar-project.properties` 并执行 `sonar-scanner`。支持 `npm` 和 `maven` 项目信息的自动解析。
 
