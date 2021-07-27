@@ -1,12 +1,12 @@
-FROM hayd/alpine-deno:1.5.4
+FROM hayd/alpine-deno:1.10.2
 
 WORKDIR /plugin
 ARG SCANNER_VERSION
 
-RUN apk add --no-cache --update curl git openjdk8-jre nodejs
+RUN apk add --no-cache --update curl git openjdk11-jre nodejs
 
-ENV JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk/jre
-ENV PATH=$JAVA_HOME/bin:/usr/lib/jvm/java-1.8-openjdk/bin:$PATH
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk/jre
+ENV PATH=$JAVA_HOME/bin:/usr/lib/jvm/java-11-openjdk/bin:$PATH
 
 RUN curl --insecure -OL "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SCANNER_VERSION.zip" && \
   unzip sonar-scanner-cli-$SCANNER_VERSION.zip && \
